@@ -1,12 +1,36 @@
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserLoginDetails } from "../features/user/userSlice";
+import { auth, provider } from "../firebase";
 
 const Login = (props) => {
+  const dispatch = useDispatch();
+  const setUser = (user) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+    );
+  };
+
+  const handleSignup = async () => {
+    auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        setUser(result.user);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
   return (
     <Container>
       <Content>
         <CTA>
           <HeaderText>LABIN</HeaderText>
-          <SignUp>GET ALL THERE</SignUp>
+          <SignUp onClick={handleSignup}>GET ALL THERE</SignUp>
           <Description>
             Login or Get Started to create your account and familiarise yourself
             with Labin, Your Own Virtual laboratory!

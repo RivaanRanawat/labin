@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectChem } from "../features/movie/movieSlice";
+import { selectMath } from "../features/movie/movieSlice";
 
-const ChemExperiments = (props) => {
-  const experiments = useSelector(selectChem);
+const MathExperiments = (props) => {
+  const experiments = useSelector(selectMath);
   const history = useHistory();
 
   function showAllExperiments() {
@@ -13,7 +13,7 @@ const ChemExperiments = (props) => {
 
   return (
     <Container>
-      <h4 onClick={showAllExperiments}>Chemistry Experiments</h4>
+      <h4 onClick={showAllExperiments}>Maths Experiments</h4>
       <Content>
         {experiments &&
           experiments.slice(0, 4).map((experiment, key) => (
@@ -32,7 +32,7 @@ const ChemExperiments = (props) => {
 const Container = styled.div`
   padding: 0 0 26px;
 
-  h4 {
+  h4{
     cursor: pointer;
   }
 `;
@@ -78,4 +78,4 @@ const Wrap = styled.div`
   }
 `;
 
-export default ChemExperiments;
+export default MathExperiments;

@@ -4,7 +4,7 @@ const initialState = {
   phys: null,
   chem: null,
   comp: null,
-  trending: null,
+  math: null,
 };
 
 const experimentSlice = createSlice({
@@ -15,7 +15,7 @@ const experimentSlice = createSlice({
       state.phys = action.payload.phys;
       state.chem = action.payload.chem;
       state.comp = action.payload.comp;
-      state.trending = action.payload.trending;
+      state.math = action.payload.math;
     },
   },
 });
@@ -25,6 +25,6 @@ export const { setExperiments } = experimentSlice.actions;
 export const selectPhy = (state) => state.experiment.phys;
 export const selectChem = (state) => state.experiment.chem;
 export const selectComp = (state) => state.experiment.comp;
-export const selectTrending = (state) => state.experiment.trending;
+export const selectMath = (state) => state.experiment.math;
 
 export default experimentSlice.reducer;

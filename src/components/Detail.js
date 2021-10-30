@@ -46,7 +46,7 @@ const Detail = (props) => {
           </Star>
         </Controls>
         <SubTitle>{detailData.subTitle}</SubTitle>
-        <Description>Learning Goals: {detailData.description}</Description>
+        <Description>Learning Goals: {detailData.desc}</Description>
       </ContentMeta>
     </Container>
   );

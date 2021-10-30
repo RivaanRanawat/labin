@@ -1,21 +1,50 @@
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import { selectChem, selectMath, selectPhy } from "../features/movie/movieSlice";
 
 const Viewers = (props) => {
+  const phyExperiments = useSelector(selectPhy);
+  const chemExperiments = useSelector(selectChem);
+  const mathExperiments = useSelector(selectMath);
+  const history = useHistory();
+
+  function handlePhyExperiment() {
+    history.push({
+      pathname: "/experiments/phys",
+      state: { experiments: phyExperiments },
+    });
+  }
+
+  function handleChemExperiment() {
+    history.push({
+      pathname: "/experiments/chem",
+      state: { experiments: chemExperiments },
+    });
+  }
+
+  function handleMathExperiment() {
+    history.push({
+      pathname: "/experiments/math",
+      state: { experiments: mathExperiments },
+    });
+  }
+
   return (
     <Container>
-      <Wrap>
+      <Wrap onClick={handlePhyExperiment}>
         <img src="/images/viewer-phys.png" alt="Physics lab" />
         <video autoPlay={true} loop={true} playsInline={true} muted>
           <source src="/videos/vid-phys.mp4" type="video/mp4" />
         </video>
       </Wrap>
-      <Wrap>
+      <Wrap onClick={handleChemExperiment}>
         <img src="/images/viewer-chem.png" alt="Chemistry Lab" />
         <video autoPlay={true} loop={true} playsInline={true} muted>
           <source src="/videos/vid-chem.mp4" type="video/mp4" />
         </video>
       </Wrap>
-      <Wrap>
+      <Wrap onClick={handleMathExperiment}>
         <img src="/images/viewer-math.png" alt="Math Lab" />
         <video autoPlay={true} loop={true} playsInline={true} muted>
           <source src="/videos/vid-math.mp4" type="video/mp4" />

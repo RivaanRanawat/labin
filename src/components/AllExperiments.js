@@ -1,22 +1,17 @@
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Link, useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectChem } from "../features/movie/movieSlice";
+import { Link, useLocation, useParams } from "react-router-dom";
 
-const ChemExperiments = (props) => {
-  const experiments = useSelector(selectChem);
-  const history = useHistory();
-
-  function showAllExperiments() {
-    history.push({ pathname: "/experiments/phys", state: { experiments } });
-  }
+function AllExperiments() {
+  const location = useLocation();
+  const experiments = location.state.experiments;
 
   return (
     <Container>
-      <h4 onClick={showAllExperiments}>Chemistry Experiments</h4>
+      <h1 className="header1">All Experiments</h1>
       <Content>
         {experiments &&
-          experiments.slice(0, 4).map((experiment, key) => (
+          experiments.map((experiment, key) => (
             <Wrap key={key}>
               {experiment.title}
               <Link to={`/detail/` + experiment.id}>
@@ -27,13 +22,17 @@ const ChemExperiments = (props) => {
       </Content>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
-  padding: 0 0 26px;
+  padding: 0 20px 26px;
 
-  h4 {
-    cursor: pointer;
+  .header1 {
+    display: flex;
+    padding-top: 50px;
+    color: white;
+    font-size: 30px;
+    justify-content: center;
   }
 `;
 
@@ -41,7 +40,7 @@ const Content = styled.div`
   display: grid;
   grid-gap: 25px;
   gap: 25px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -58,6 +57,7 @@ const Wrap = styled.div`
   position: relative;
   transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
   border: 3px solid rgba(249, 249, 249, 0.1);
+
   img {
     inset: 0px;
     display: block;
@@ -70,6 +70,7 @@ const Wrap = styled.div`
     z-index: 1;
     top: 0;
   }
+
   &:hover {
     box-shadow: rgb(0 0 0 / 80%) 0px 40px 58px -16px,
       rgb(0 0 0 / 72%) 0px 30px 22px -10px;
@@ -78,4 +79,4 @@ const Wrap = styled.div`
   }
 `;
 
-export default ChemExperiments;
+export default AllExperiments;

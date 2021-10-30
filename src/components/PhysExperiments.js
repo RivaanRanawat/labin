@@ -2,18 +2,24 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectPhy } from "../features/movie/movieSlice";
+import { useHistory } from "react-router";
 
 const PhyExperiments = (props) => {
   const experiments = useSelector(selectPhy);
-  
+  const history = useHistory();
+
+  function showAllExperiments() {
+    history.push({ pathname: "/experiments/phys", state: { experiments } });
+  }
+
   return (
     <Container>
-      <h4>Top Physics Experiments</h4>
+      <h4 onClick={showAllExperiments}>Physics Experiments</h4>
       <Content>
         {experiments &&
-          experiments.map((experiment, key) => (
+          experiments.slice(0, 4).map((experiment, key) => (
             <Wrap key={key}>
-              {experiment.id}
+              {experiment.title}
               <Link to={`/detail/` + experiment.id}>
                 <img src={experiment.cardImg} alt={experiment.title} />
               </Link>
@@ -26,6 +32,10 @@ const PhyExperiments = (props) => {
 
 const Container = styled.div`
   padding: 0 0 26px;
+
+  h4 {
+    cursor: pointer;
+  }
 `;
 
 const Content = styled.div`

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -15,6 +15,7 @@ const Header = (props) => {
   const history = useHistory();
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+  const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -56,6 +57,11 @@ const Header = (props) => {
     );
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    history.push(`search/${searchName.charAt(0).toUpperCase() + searchName.slice(1).toLowerCase()}`);
+  }
+
   return (
     <Nav>
       <Logo>
@@ -74,13 +80,15 @@ const Header = (props) => {
               <span>HOME</span>
             </a>
             <a>
-              <img src="/images/search-icon.svg" alt="SEARCH" />
-              <span>SEARCH</span>
-            </a>
-            <a>
               <img src="/images/original-icon.svg" alt="STAR" />
               <span>STARS</span>
             </a>
+            <form onSubmit={handleSearch}>
+              <input type="search" placeholder="Search here ..." onChange={(e) => setSearchName(e.target.value)}/>
+              <i class="fa fa-search">
+                <img src="/images/search-icon.svg" />
+              </i>
+            </form>
           </NavMenu>
           <SignOut>
             <UserImg src={userPhoto} alt={userName} />
@@ -141,7 +149,7 @@ const NavMenu = styled.div`
     padding: 0 12px;
 
     img {
-      height: 20px;
+      height: 42.5px;
       min-width: 20px;
       width: 20px;
       z-index: auto;
@@ -181,6 +189,66 @@ const NavMenu = styled.div`
         opacity: 1 !important;
       }
     }
+  }
+
+
+
+  form {
+    position: relative;
+    top: 10%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    transition: all 1s;
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+    border-radius: 25px;
+    padding: 5px;
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 42.5px;
+    line-height: 30px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    text-transform: capitalize;
+  }
+
+  .fa {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 42.5px;
+    height: 42.5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    color: #07051a;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+  }
+
+  form:hover {
+    width: 300px;
+    cursor: pointer;
+  }
+
+  form:hover input {
+    display: block;
+  }
+
+  form:hover .fa {
+    background: #07051a;
+    color: white;
   }
 `;
 

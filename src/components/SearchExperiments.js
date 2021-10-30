@@ -1,31 +1,51 @@
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import db from "../firebase";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectTrending } from "../features/movie/movieSlice";
 
-const Trending = (props) => {
-  const movies = useSelector(selectTrending);
+function SearchExperiments() {
+  const { slug } = useParams();
+  const [searches, setSearches] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    db.collection("movies")
+      .where("title", ">=", slug)
+      .orderBy("title", "asc")
+      .onSnapshot((snapshot) => {
+        setIsLoading(false);
+        snapshot.docs.map((doc) => {
+          setSearches((prev) => [...prev, doc.data()]);
+        });
+      });
+  }, []);
   return (
     <Container>
-      <h4>Trending</h4>
+      <h1>Experiments</h1>
       <Content>
-        {movies &&
-          movies.map((movie, key) => (
+        {searches &&
+          searches.map((search, key) => (
             <Wrap key={key}>
-              {movie.id}
-              <Link to={`/detail/` + movie.id}>
-                <img src={movie.cardImg} alt={movie.title} />
+              {search.title}
+              <Link to={`/detail/` + search.id}>
+                <img src={search.cardImg} alt={search.title} />
               </Link>
             </Wrap>
           ))}
       </Content>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   padding: 0 0 26px;
+
+  h1 {
+    display: flex;
+    margin-top: 100px;
+    justify-content: center;
+  }
 `;
 
 const Content = styled.div`
@@ -49,6 +69,7 @@ const Wrap = styled.div`
   position: relative;
   transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
   border: 3px solid rgba(249, 249, 249, 0.1);
+
   img {
     inset: 0px;
     display: block;
@@ -61,6 +82,7 @@ const Wrap = styled.div`
     z-index: 1;
     top: 0;
   }
+
   &:hover {
     box-shadow: rgb(0 0 0 / 80%) 0px 40px 58px -16px,
       rgb(0 0 0 / 72%) 0px 30px 22px -10px;
@@ -69,4 +91,4 @@ const Wrap = styled.div`
   }
 `;
 
-export default Trending;
+export default SearchExperiments;
