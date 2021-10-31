@@ -11,6 +11,7 @@ const Login = (props) => {
         name: user.displayName,
         email: user.email,
         photo: user.photoURL,
+        uid: user.uid,
       })
     );
   };

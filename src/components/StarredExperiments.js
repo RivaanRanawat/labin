@@ -1,35 +1,41 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
-import db from "../firebase";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import db from "../firebase";
+import { selectUserUid } from "../features/user/userSlice";
+import { useSelector } from "react-redux";
 
-function SearchExperiments() {
-  const { slug } = useParams();
-  const [searches, setSearches] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+function StarredExperiments() {
+  const uid = useSelector(selectUserUid);
+  const [experiments, setExperiments] = useState([]);
 
   useEffect(() => {
-    db.collection("movies")
-      .where("title", ">=", slug)
-      .orderBy("title", "asc")
-      .onSnapshot((snapshot) => {
-        setIsLoading(false);
-        snapshot.docs.map((doc) => {
-          setSearches((prev) => [...prev, doc.data()]);
+    for (let i = 0; i < 52; i++) {
+      let id = i.toString();
+      db.collection("users")
+        .doc(uid)
+        .collection(id)
+        .get()
+        .then((doc) => {
+          doc.docs.map((d) => {
+            if (d.exists) {
+              setExperiments((prev) => [...prev, d.data()]);
+            }
+          });
         });
-      });
-  }, []);
+    }
+  }, [uid]);
+
   return (
     <Container>
-      <h1>Experiments</h1>
+      <h1>Starred Experiments</h1>
       <Content>
-        {searches &&
-          searches.map((search, key) => (
+        {experiments &&
+          experiments.map((experiment, key) => (
             <Wrap key={key}>
-              {search.title}
-              <Link to={`/detail/` + search.id}>
-                <img src={search.cardImg} alt={search.title} />
+              {experiment.title}
+              <Link to={`/detail/` + experiment.id}>
+                <img src={experiment.cardImg} alt={experiment.title} />
               </Link>
             </Wrap>
           ))}
@@ -39,11 +45,13 @@ function SearchExperiments() {
 }
 
 const Container = styled.div`
-  padding: 0 0 26px;
+  padding: 0 20px 26px;
 
   h1 {
     display: flex;
-    margin-top: 100px;
+    padding-top: 50px;
+    color: white;
+    font-size: 30px;
     justify-content: center;
   }
 `;
@@ -91,4 +99,4 @@ const Wrap = styled.div`
   }
 `;
 
-export default SearchExperiments;
+export default StarredExperiments;

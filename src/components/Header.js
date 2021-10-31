@@ -53,6 +53,7 @@ const Header = (props) => {
         name: user.displayName,
         email: user.email,
         photo: user.photoURL,
+        uid: user.uid,
       })
     );
   };
@@ -79,7 +80,7 @@ const Header = (props) => {
               <img src="/images/home-icon.svg" alt="HOME" />
               <span>HOME</span>
             </a>
-            <a>
+            <a onClick={() => history.push("/starred-experiments")}>
               <img src="/images/original-icon.svg" alt="STAR" />
               <span>STARS</span>
             </a>

@@ -9,6 +9,7 @@ import db from "./firebase";
 import React, { useEffect } from "react";
 import AllExperiments from "./components/AllExperiments";
 import SearchExperiments from "./components/SearchExperiments";
+import StarredExperiments from "./components/StarredExperiments";
 
 function App() {
   // useEffect(() => {
@@ -56,6 +57,9 @@ function App() {
           </Route>
           <Route path="/search/:slug">
             <SearchExperiments />
+          </Route>
+          <Route path="/starred-experiments">
+            <StarredExperiments />
           </Route>
         </Switch>
       </Router>
