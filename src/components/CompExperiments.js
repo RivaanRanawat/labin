@@ -8,7 +8,7 @@ const CompExperiments = (props) => {
 
   return (
     <Container>
-      <h4>Top Computer Experiments</h4>
+      <h4>Computer Experiments</h4>
       <Content>
         {experiments &&
           experiments.map((experiment, key) => (

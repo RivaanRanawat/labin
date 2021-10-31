@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import db from "../firebase";
+import { auth } from "../firebase";
 
 const Detail = (props) => {
   const { id } = useParams();
   const [detailData, setDetailData] = useState({});
   const history = useHistory();
+  const uid = auth.currentUser.uid;
+  const [isStarred, setIsStarred] = useState(false);
 
   useEffect(() => {
     db.collection("movies")
@@ -22,7 +25,46 @@ const Detail = (props) => {
       .catch((error) => {
         console.log("Error getting document:", error);
       });
+
+    db.collection("users")
+      .doc(uid)
+      .collection(id)
+      .get()
+      .then((doc) => {
+        doc.docs.map((document) => {
+          if (document.exists) {
+            setIsStarred(true);
+          } else {
+            setIsStarred(false);
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
+
+  const handleStar = async () => {
+    if (!isStarred) {
+      await db
+        .collection("users")
+        .doc(uid)
+        .collection(id)
+        .add({
+          uid,
+          ...detailData,
+          isStarred: true,
+        });
+    } else {
+      const doc = await db.collection("users").doc(uid).collection(id).get();
+      doc.docs.map((d) => {
+        if(d.exists) {
+          d.ref.delete();
+        }
+      })
+    }
+    setIsStarred(!isStarred);
+  };
 
   return (
     <Container>
@@ -30,20 +72,27 @@ const Detail = (props) => {
         <img alt={detailData.title} src={detailData.cardImg} />
       </Background>
 
-      <ImageTitle>
-      {detailData.title}
-      </ImageTitle>
+      <ImageTitle>{detailData.title}</ImageTitle>
       <ContentMeta>
         <Controls>
-          <Player onClick={() => history.push({pathname: `/explore-experiment/${detailData.id}`, state: {expUrl: detailData.expUrl}})}>
+          <Explore
+            onClick={() =>
+              history.push({
+                pathname: `/explore-experiment/${detailData.id}`,
+                state: { expUrl: detailData.expUrl },
+              })
+            }
+          >
             <img src="/images/explore-icon.png" alt="explore" />
             <span>Explore</span>
-          </Player>
-          <Star>
-            <div>
-              <img src="/images/original-icon.svg" alt="star" />
-            </div>
-          </Star>
+          </Explore>
+          <Starred onClick={handleStar}>
+            <img
+              src={!isStarred ? "/images/star.png" : "/images/star-filled.png"}
+              alt="star"
+            />
+            <span>{!isStarred? "Star": "Starred"}</span>
+          </Starred>
         </Controls>
         <SubTitle>{detailData.subTitle}</SubTitle>
         <Description>Learning Goals: {detailData.desc}</Description>
@@ -103,7 +152,7 @@ const Controls = styled.div`
   min-height: 56px;
 `;
 
-const Player = styled.button`
+const Explore = styled.button`
   font-size: 15px;
   margin: 0px 22px 0px 0px;
   padding: 0px 24px;
@@ -136,28 +185,45 @@ const Player = styled.button`
 
     img {
       width: 25px;
+      margin-right: 4px;
     }
   }
 `;
 
-const Star = styled.div`
-  height: 44px;
-  width: 44px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Starred = styled.div`
+  font-size: 15px;
+  margin: 0px 22px 0px 0px;
+  padding: 0px 24px;
+  height: 56px;
+  border-radius: 4px;
   cursor: pointer;
-  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 1.8px;
+  text-align: center;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  color: rgb(0, 0, 0);
 
-  div {
-    height: 40px;
-    width: 40px;
-    background: rgb(0, 0, 0);
-    border-radius: 50%;
+  img {
+    width: 20px;
+    margin-right: 4px;
+  }
+
+  &:hover {
+    background: rgb(198, 198, 198);
+  }
+
+  @media (max-width: 768px) {
+    height: 45px;
+    padding: 0px 12px;
+    font-size: 12px;
+    margin: 0px 10px 0px 0px;
 
     img {
-      width: 100%;
+      width: 25px;
     }
   }
 `;
