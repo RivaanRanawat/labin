@@ -79,7 +79,7 @@ const Detail = (props) => {
             onClick={() =>
               history.push({
                 pathname: `/explore-experiment/${detailData.id}`,
-                state: { expUrl: detailData.expUrl },
+                state: { detailData},
               })
             }
           >
@@ -95,7 +95,7 @@ const Detail = (props) => {
           </Starred>
         </Controls>
         <SubTitle>{detailData.subTitle}</SubTitle>
-        <Description>Learning Goals: {detailData.desc}</Description>
+        <Description>{detailData.desc}</Description>
       </ContentMeta>
     </Container>
   );
@@ -138,6 +138,11 @@ const ImageTitle = styled.h1`
   height: 30vw;
   font-size: 5rem;
   width: 100%;
+
+  @media (max-width: 768px) {
+    margin-top: 20%;
+    font-size: 3rem;
+  }
 `;
 
 const ContentMeta = styled.div`
@@ -223,7 +228,7 @@ const Starred = styled.div`
     margin: 0px 10px 0px 0px;
 
     img {
-      width: 25px;
+      width: 15px;
     }
   }
 `;
@@ -238,8 +243,12 @@ const SubTitle = styled.div`
   }
 `;
 
-const Description = styled.div`
+const Description = styled.p`
   line-height: 1.4;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   font-size: 18px;
   padding: 16px 0px;
   color: rgb(249, 249, 249);

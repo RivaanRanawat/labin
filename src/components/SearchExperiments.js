@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import db from "../firebase";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Loader from "./Loader";
 
 function SearchExperiments() {
   const { slug } = useParams();
@@ -14,12 +15,17 @@ function SearchExperiments() {
       .where("title", ">=", slug)
       .orderBy("title", "asc")
       .onSnapshot((snapshot) => {
-        setIsLoading(false);
+        setIsLoading(true);
         snapshot.docs.map((doc) => {
           setSearches((prev) => [...prev, doc.data()]);
         });
+        setIsLoading(false);
       });
   }, []);
+
+  if (isLoading) {
+    return <Loader></Loader>;
+  }
   return (
     <Container>
       <h1>Experiments</h1>

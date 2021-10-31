@@ -10,6 +10,7 @@ import { selectUserName } from "../features/user/userSlice";
 import PhyExperiments from "./PhysExperiments";
 import ChemExperiments from "./ChemExperiments";
 import MathExperiments from "./MathExperiments";
+import Loader from "./Loader";
 
 const Home = (props) => {
   const dispatch = useDispatch();
@@ -65,7 +66,7 @@ const Home = (props) => {
         <PhyExperiments />
         <ChemExperiments />
         <MathExperiments />
-        <Originals />
+        {/* <Originals /> */}
       </Container>
     );
   }
@@ -75,25 +76,6 @@ const Home = (props) => {
     </center>
   );
 };
-
-const Loader = styled.div`
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #0063e5;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  margin-top: 25%;
-  animation: spin 2s linear infinite;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
 
 const Container = styled.main`
   position: relative;

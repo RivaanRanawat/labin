@@ -26,14 +26,19 @@ const ImgSlider = (props) => {
       </Wrap>
       <Wrap>
         <a>
-          <img src="/images/slider-chem.jpg" alt="" />
+          <img src="/images/slider-chem.png" alt="" />
         </a>
       </Wrap>
       <Wrap>
         <a>
-          <img src="/images/slider-comp.png" alt="" />
+          <img src="/images/slider-math.jpeg" alt="" />
         </a>
       </Wrap>
+      {/* <Wrap>
+        <a>
+          <img src="/images/slider-comp.png" alt="" />
+        </a>
+      </Wrap> */}
     </Carousel>
   );
 };

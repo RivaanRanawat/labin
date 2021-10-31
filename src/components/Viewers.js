@@ -50,12 +50,12 @@ const Viewers = (props) => {
           <source src="/videos/vid-math.mp4" type="video/mp4" />
         </video>
       </Wrap>
-      <Wrap>
+      {/* <Wrap>
         <img src="/images/viewer-comp.png" alt="Computer Lab" />
         <video autoPlay={true} loop={true} playsInline={true} muted>
           <source src="/videos/vid-comp.mp4" type="video/mp4" />
         </video>
-      </Wrap>
+      </Wrap> */}
     </Container>
   );
 };
@@ -66,7 +66,7 @@ const Container = styled.div`
   display: grid;
   grid-gap: 25px;
   gap: 25px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));

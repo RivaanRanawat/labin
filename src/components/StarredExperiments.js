@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import db from "../firebase";
 import { selectUserUid } from "../features/user/userSlice";
 import { useSelector } from "react-redux";
+import Loader from "./Loader";
 
 function StarredExperiments() {
   const uid = useSelector(selectUserUid);
   const [experiments, setExperiments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     for (let i = 0; i < 52; i++) {
       let id = i.toString();
       db.collection("users")
@@ -22,10 +25,12 @@ function StarredExperiments() {
               setExperiments((prev) => [...prev, d.data()]);
             }
           });
+          setIsLoading(false);
         });
     }
   }, [uid]);
 
+  if (isLoading) return <Loader></Loader>;
   return (
     <Container>
       <h1>Starred Experiments</h1>
