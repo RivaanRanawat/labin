@@ -2,9 +2,11 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserLoginDetails } from "../features/user/userSlice";
 import { auth, provider } from "../firebase";
+import { useHistory } from "react-router";
 
 const Login = (props) => {
   const dispatch = useDispatch();
+  
   const setUser = (user) => {
     dispatch(
       setUserLoginDetails({

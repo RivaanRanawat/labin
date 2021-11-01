@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useHistory,
+} from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import "./App.css";
@@ -10,59 +15,57 @@ import React, { useEffect } from "react";
 import AllExperiments from "./components/AllExperiments";
 import SearchExperiments from "./components/SearchExperiments";
 import StarredExperiments from "./components/StarredExperiments";
+import PrivateRoute from "./components/PrivateComponent";
+import { auth, provider } from "./firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserName, setUserLoginDetails } from "./features/user/userSlice";
+import MeetComponent from "./components/MeetComponent";
 
 function App() {
-  // useEffect(() => {
-  //   async function tempD() {
-  //     const id = "50";
-  //     try {
-  //       await db.collection("movies").doc(id).set({
-  //         cardImg:
-  //           "https://phet.colorado.edu/sims/html/area-builder/latest/area-builder-900.png",
-  //         title: "Arithmetics",
-  //         subTitle: "Multiplication • Division • Factoring",
-  //         expUrl:
-  //           "https://phet.colorado.edu/sims/html/area-builder/latest/area-builder_en.html",
-  //         type: "math",
-  //         desc: "Explain how multiplication tables help understand multiplication, factoring, and division. Use an array model to understand multiplication, factoring, and division. Increase accuracy in multiplying, factoring and dividing. Develop multiple strategies for arithmetic problems.",
-  //         id: id,
-  //       });
-  //       console.log("done");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  //   tempD();
-  // }, []);
+  const dispatch = useDispatch();
+  const userName = useSelector(selectUserName);
+  const history = useHistory();
+
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        history.push("/");
+      }
+    });
+  }, [userName]);
+
+  const setUser = (user) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        uid: user.uid,
+      })
+    );
+  };
 
   return (
     <div className="App">
-      <Router>
-        <Header />
+      <Header />
+      {userName ? (
         <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/detail/:id">
-            <Detail />
-          </Route>
-          <Route path="/explore-experiment/:id">
-            <Explore />
-          </Route>
-          <Route path="/experiments/:slug">
-            <AllExperiments />
-          </Route>
-          <Route path="/search/:slug">
-            <SearchExperiments />
-          </Route>
-          <Route path="/starred-experiments">
-            <StarredExperiments />
-          </Route>
+          <PrivateRoute exact path="/" component={Home} />
+          <PrivateRoute path="/detail/:id" component={Detail} />
+          <PrivateRoute path="/explore-experiment/:id" component={Explore} />
+          <PrivateRoute path="/experiments/:slug" component={AllExperiments} />
+          <PrivateRoute path="/search/:slug" component={SearchExperiments} />
+          <PrivateRoute
+            path="/starred-experiments"
+            component={StarredExperiments}
+          />
+          <PrivateRoute path="/meet/:slug" component={MeetComponent} />
         </Switch>
-      </Router>
+      ) : (
+        <Route exact path="/" component={Login} />
+      )}
     </div>
   );
 }

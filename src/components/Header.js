@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { auth, provider } from "../firebase";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   selectUserName,
   selectUserPhoto,
@@ -16,15 +18,6 @@ const Header = (props) => {
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
   const [searchName, setSearchName] = useState("");
-
-  useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUser(user);
-        history.push("/home");
-      }
-    });
-  }, [userName]);
 
   const handleAuth = () => {
     if (!userName) {
@@ -41,7 +34,7 @@ const Header = (props) => {
         .signOut()
         .then(() => {
           dispatch(setSignOutState());
-          history.push("/");
+          history.push("/login");
         })
         .catch((err) => alert(err.message));
     }
@@ -60,13 +53,23 @@ const Header = (props) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    history.push(`search/${searchName.charAt(0).toUpperCase() + searchName.slice(1).toLowerCase()}`);
-  }
+    history.push(
+      `search/${
+        searchName.charAt(0).toUpperCase() + searchName.slice(1).toLowerCase()
+      }`
+    );
+  };
+
+  const handleMeet = () => {
+    var uuid = uuidv4().substring(0, 8);
+    const win = window.open(`/meet/${uuid}`, "_blank");
+    win.focus();
+  };
 
   return (
     <Nav>
       <Logo>
-        <a href="/home">
+        <a href="/">
           <img src="/images/lab-logo.png" alt="Labin Logo" />
         </a>
       </Logo>
@@ -76,7 +79,7 @@ const Header = (props) => {
       ) : (
         <>
           <NavMenu>
-            <a href="/home">
+            <a href="/">
               <img src="/images/home-icon.svg" alt="HOME" />
               <span>HOME</span>
             </a>
@@ -84,8 +87,20 @@ const Header = (props) => {
               <img src="/images/original-icon.svg" alt="STAR" />
               <span>STARS</span>
             </a>
+            <a onClick={handleMeet}>
+              <img
+                style={{ height: "20px", marginRight: "2px" }}
+                src="/images/video-icon.png"
+                alt="Meet"
+              />
+              <span>MEET</span>
+            </a>
             <form onSubmit={handleSearch}>
-              <input type="search" placeholder="Search here ..." onChange={(e) => setSearchName(e.target.value)}/>
+              <input
+                type="search"
+                placeholder="Search here ..."
+                onChange={(e) => setSearchName(e.target.value)}
+              />
               <i class="fa fa-search">
                 <img src="/images/search-icon.svg" />
               </i>
@@ -192,8 +207,6 @@ const NavMenu = styled.div`
       }
     }
   }
-
-
 
   form {
     position: relative;
