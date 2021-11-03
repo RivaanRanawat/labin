@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import ImgSlider from "./ImgSlider";
-import Originals from "./CompExperiments";
 import Viewers from "./Viewers";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,13 +11,14 @@ import ChemExperiments from "./ChemExperiments";
 import MathExperiments from "./MathExperiments";
 import Loader from "./Loader";
 import ChatWindow from "./ChatWindow";
+import Researches from "./Researches";
 
 const Home = (props) => {
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
   let phys = [];
   let chem = [];
-  let comp = [];
+  let researches = [];
   let math = [];
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,8 +34,8 @@ const Home = (props) => {
               phys = [...phys, { id: doc.id, ...doc.data() }];
               break;
 
-            case "comp":
-              comp = [...comp, { id: doc.id, ...doc.data() }];
+            case "researches":
+              researches = [...researches, { id: doc.id, ...doc.data() }];
               break;
 
             case "chem":
@@ -53,7 +53,7 @@ const Home = (props) => {
           setExperiments({
             phys: phys,
             chem: chem,
-            comp: comp,
+            comp: researches,
             math: math,
           })
         );
@@ -69,7 +69,6 @@ const Home = (props) => {
           <PhyExperiments />
           <ChemExperiments />
           <MathExperiments />
-          {/* <Originals /> */}
         </Container>
         <ChatWindow isOpen={isOpen} />
       </div>

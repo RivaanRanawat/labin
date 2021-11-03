@@ -20,6 +20,11 @@ import { auth, provider } from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserName, setUserLoginDetails } from "./features/user/userSlice";
 import MeetComponent from "./components/MeetComponent";
+import Researches from "./components/Researches";
+import CreateNewResearch from "./components/CreateNewResearch";
+import TextEditor from "./components/TextEditor";
+import ReadResearch from "./components/ReadResearch";
+import MyDrafts from "./components/MyDrafts";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,6 +67,11 @@ function App() {
             component={StarredExperiments}
           />
           <PrivateRoute path="/meet/:slug" component={MeetComponent} />
+          <PrivateRoute path="/published-researches" component={Researches} />
+          <PrivateRoute path="/create-research" component={CreateNewResearch} />
+          <PrivateRoute path="/text-editor/:id" component={TextEditor} />
+          <PrivateRoute path="/read-research/:id" component={ReadResearch} />
+          <PrivateRoute path="/my-drafts" component={MyDrafts} />
         </Switch>
       ) : (
         <Route exact path="/" component={Login} />

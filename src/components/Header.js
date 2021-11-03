@@ -89,11 +89,19 @@ const Header = (props) => {
             </a>
             <a onClick={handleMeet}>
               <img
-                style={{ height: "20px", marginRight: "2px" }}
+                style={{ height: "20px", marginRight: "4px" }}
                 src="/images/video-icon.png"
                 alt="Meet"
               />
               <span>MEET</span>
+            </a>
+            <a onClick={() => history.push('/published-researches')}>
+              <img
+                src="/images/researc-icon.png"
+                alt="Researches"
+                style={{ height: "15px", marginRight: "4px" }}
+              />
+              <span>RESEARCH</span>
             </a>
             <form onSubmit={handleSearch}>
               <input
@@ -109,7 +117,11 @@ const Header = (props) => {
           <SignOut>
             <UserImg src={userPhoto} alt={userName} />
             <DropDown>
-              <span onClick={handleAuth}>Sign out</span>
+              <span onClick={() => history.push('/my-drafts')}>MyDrafts</span>
+              <div style={{ height: "10px" }}></div>
+              <span style={{ display: "inline-block"}} onClick={handleAuth}>
+                Sign out
+              </span>
             </DropDown>
           </SignOut>
         </>
@@ -166,7 +178,7 @@ const NavMenu = styled.div`
     cursor: pointer;
 
     img {
-      height: 42.5px;
+      height: 50px;
       min-width: 20px;
       width: 20px;
       z-index: auto;
@@ -296,10 +308,10 @@ const DropDown = styled.div`
   border: 1px solid rgba(151, 151, 151, 0.34);
   border-radius: 4px;
   box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
-  padding: 10px;
-  font-size: 14px;
-  letter-spacing: 3px;
-  width: 100px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 15px;
+  // width: 100px;
   opacity: 0;
 `;
 

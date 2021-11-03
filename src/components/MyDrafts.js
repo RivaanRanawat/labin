@@ -1,21 +1,34 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectComp } from "../features/movie/movieSlice";
+import { useHistory } from "react-router";
+import { useEffect, useState } from "react";
+import db from "../firebase";
 
-const CompExperiments = (props) => {
-  const experiments = useSelector(selectComp);
+const MyDrafts = (props) => {
+  const [experiments, setExperiments] = useState([]);
+  useEffect(() => {
+    db.collection("drafts").onSnapshot((snap) => {
+      snap.docs.map((doc) => {
+        setExperiments((arr) => [...arr, doc.data()]);
+      });
+    });
+  }, []);
+  const history = useHistory();
 
   return (
     <Container>
-      <h4>Computer Experiments</h4>
+      <h1 className="header">My Drafts</h1>
+      <AddIcon onClick={() => history.push("/create-research")}>
+        <a>
+          <img src="/images/edit-icon.png" alt="Add Research" />
+        </a>
+      </AddIcon>
       <Content>
         {experiments &&
           experiments.map((experiment, key) => (
             <Wrap key={key}>
-              {experiment.id}
-              <Link to={`/detail/` + experiment.id}>
-                <img src={experiment.cardImg} alt={experiment.title} />
+              <Link to={`/text-editor/${experiment.id}`}>
+                <h1 className="experimentName">{experiment.name}</h1>
               </Link>
             </Wrap>
           ))}
@@ -24,15 +37,43 @@ const CompExperiments = (props) => {
   );
 };
 
+const AddIcon = styled.a`
+  padding: 0;
+  width: 50px;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  font-size: 0;
+  margin-bottom: 10px;
+  cursor: pointer;
+
+  img {
+    height: 30px;
+  }
+`;
+
 const Container = styled.div`
   padding: 0 0 26px;
+  margin-left: 15px;
+
+  .header {
+    display: flex;
+    margin-top: 80px;
+    justify-content: center;
+  }
+
+  .experimentName {
+    text-align: center;
+    align-item: center;
+    font-size: 40px;
+  }
 `;
 
 const Content = styled.div`
   display: grid;
   grid-gap: 25px;
   gap: 25px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -40,7 +81,6 @@ const Content = styled.div`
 `;
 
 const Wrap = styled.div`
-  padding-top: 56.25%;
   border-radius: 10px;
   box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
     rgb(0 0 0 / 73%) 0px 16px 10px -10px;
@@ -69,4 +109,4 @@ const Wrap = styled.div`
   }
 `;
 
-export default CompExperiments;
+export default MyDrafts;
