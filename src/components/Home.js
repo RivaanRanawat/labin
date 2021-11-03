@@ -11,6 +11,7 @@ import PhyExperiments from "./PhysExperiments";
 import ChemExperiments from "./ChemExperiments";
 import MathExperiments from "./MathExperiments";
 import Loader from "./Loader";
+import ChatWindow from "./ChatWindow";
 
 const Home = (props) => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const Home = (props) => {
   let comp = [];
   let math = [];
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     db.collection("movies")
@@ -60,14 +62,17 @@ const Home = (props) => {
 
   if (isLoading) {
     return (
-      <Container>
-        <ImgSlider />
-        <Viewers />
-        <PhyExperiments />
-        <ChemExperiments />
-        <MathExperiments />
-        {/* <Originals /> */}
-      </Container>
+      <div>
+        <Container style={{ zIndex: isOpen ? "-1" : "0" }}>
+          <ImgSlider />
+          <Viewers />
+          <PhyExperiments />
+          <ChemExperiments />
+          <MathExperiments />
+          {/* <Originals /> */}
+        </Container>
+        <ChatWindow isOpen={isOpen} />
+      </div>
     );
   }
   return (
