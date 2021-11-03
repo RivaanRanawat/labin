@@ -311,7 +311,7 @@ const DropDown = styled.div`
   font-size: 16px;
   letter-spacing: 1px;
   padding: 15px;
-  // width: 100px;
+  width: 100px;
   opacity: 0;
 `;
 

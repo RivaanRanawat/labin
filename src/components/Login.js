@@ -33,7 +33,7 @@ const Login = (props) => {
       <Content>
         <CTA>
           <HeaderText>LABIN</HeaderText>
-          <SignUp onClick={handleSignup}>GET ALL THERE</SignUp>
+          <SignUp onClick={handleSignup}>GET THERE</SignUp>
           <Description>
             Login or Get Started to create your account and familiarise yourself
             with Labin, Your Own Virtual laboratory!

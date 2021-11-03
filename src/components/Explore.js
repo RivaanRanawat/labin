@@ -13,12 +13,10 @@ function Explore() {
       <InfoIcon onClick={() => setIsModalOpen(!isModalOpen)}>
         <img src="/images/info-icon.png" />
       </InfoIcon>
-      <iframe
+      <Frame
         src={data.expUrl}
-        width="1440"
-        height="710"
         allowfullscreen
-      ></iframe>
+      ></Frame>
       {!isModalOpen ? (
         <div></div>
       ) : (
@@ -37,6 +35,15 @@ const InfoIcon = styled.div`
   right: 0;
   img {
     width: 40px;
+  }
+`;
+
+const Frame = styled.iframe`
+  height: 710px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    height: 630px;
   }
 `;
 
