@@ -46,7 +46,7 @@ function ChatWindow() {
         <section className="chat-window">
           <NavClose>
             <h4 style={{ marginLeft: "10px" }}>Live Chat</h4>
-            <img src="images/close.png" onClick={() => setIsOpen(false)} />
+            <img src="images/close.png" alt="Close" onClick={() => setIsOpen(false)} />
           </NavClose>
           {messages &&
             messages.map((m) => {

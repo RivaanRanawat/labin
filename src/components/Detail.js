@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import db from "../firebase";
 import { auth } from "../firebase";
 
@@ -58,12 +58,16 @@ const Detail = (props) => {
     } else {
       const doc = await db.collection("users").doc(uid).collection(id).get();
       doc.docs.map((d) => {
-        if(d.exists) {
+        if (d.exists) {
           d.ref.delete();
         }
-      })
+      });
     }
     setIsStarred(!isStarred);
+  };
+
+  const theme = {
+    fontColor: detailData.fontColor === "black" ? "#000000" : "#F9F9F9",
   };
 
   return (
@@ -72,31 +76,35 @@ const Detail = (props) => {
         <img alt={detailData.title} src={detailData.cardImg} />
       </Background>
 
-      <ImageTitle>{detailData.title}</ImageTitle>
-      <ContentMeta>
-        <Controls>
-          <Explore
-            onClick={() =>
-              history.push({
-                pathname: `/explore-experiment/${detailData.id}`,
-                state: { detailData},
-              })
-            }
-          >
-            <img src="/images/explore-icon.png" alt="explore" />
-            <span>Explore</span>
-          </Explore>
-          <Starred onClick={handleStar}>
-            <img
-              src={!isStarred ? "/images/star.png" : "/images/star-filled.png"}
-              alt="star"
-            />
-            <span>{!isStarred? "Star": "Starred"}</span>
-          </Starred>
-        </Controls>
-        <SubTitle>{detailData.subTitle}</SubTitle>
-        <Description>{detailData.desc}</Description>
-      </ContentMeta>
+      <ThemeProvider theme={theme}>
+        <ImageTitle>{detailData.title}</ImageTitle>
+        <ContentMeta>
+          <Controls>
+            <Explore
+              onClick={() =>
+                history.push({
+                  pathname: `/explore-experiment/${detailData.id}`,
+                  state: { detailData },
+                })
+              }
+            >
+              <img src="/images/explore-icon.png" alt="explore" />
+              <span>Explore</span>
+            </Explore>
+            <Starred onClick={handleStar}>
+              <img
+                src={
+                  !isStarred ? "/images/star.png" : "/images/star-filled.png"
+                }
+                alt="star"
+              />
+              <span>{!isStarred ? "Star" : "Starred"}</span>
+            </Starred>
+          </Controls>
+          <SubTitle>{detailData.subTitle}</SubTitle>
+          <Description>{detailData.desc}</Description>
+        </ContentMeta>
+      </ThemeProvider>
     </Container>
   );
 };
@@ -138,7 +146,8 @@ const ImageTitle = styled.h1`
   height: 30vw;
   font-size: 5rem;
   width: 100%;
-
+  color: ${(props) => props.theme.fontColor};
+  
   @media (max-width: 768px) {
     margin-top: 20%;
     font-size: 3rem;
@@ -234,7 +243,7 @@ const Starred = styled.div`
 `;
 
 const SubTitle = styled.div`
-  color: rgb(249, 249, 249);
+  color: ${(props) => props.theme.fontColor};
   font-size: 15px;
   min-height: 20px;
 
@@ -251,7 +260,7 @@ const Description = styled.p`
   -webkit-box-orient: vertical;
   font-size: 18px;
   padding: 16px 0px;
-  color: rgb(249, 249, 249);
+  color: ${(props) => props.theme.fontColor};
 
   @media (max-width: 768px) {
     font-size: 14px;
