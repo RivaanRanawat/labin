@@ -5,6 +5,8 @@ import { useHistory, useParams } from "react-router";
 import Loader from "./Loader";
 import styled from "styled-components";
 import db from "../firebase";
+import { useSelector } from "react-redux";
+import { selectUserName } from "../features/user/userSlice";
 
 function TextEditor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +16,7 @@ function TextEditor() {
   const [title, setTitle] = useState('');
   const [paraContent, setParaContent] = useState();
   const history = useHistory();
+  const username = useSelector(selectUserName);
 
   const toolbarOptions = [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -89,6 +92,7 @@ function TextEditor() {
         name: title,
         id,
         content: quill.getContents().ops,
+        publisher: username
       });
       setIsSaving(false);
       history.push("/");

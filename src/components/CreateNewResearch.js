@@ -4,12 +4,13 @@ import styled from "styled-components";
 import db from "../firebase";
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector } from "react-redux";
-import { selectUserUid } from "../features/user/userSlice";
+import { selectUserName, selectUserUid } from "../features/user/userSlice";
 
 function CreateNewResearch() {
   const [isLoading, setIsLoading] = useState(false);
   const [researchName, setResearchName] = useState("");
   const history = useHistory();
+  const username = useSelector(selectUserName);
   const uid = useSelector(selectUserUid);
 
   async function handleFormSubmit(e) {
@@ -24,6 +25,7 @@ function CreateNewResearch() {
           name: researchName.trim(),
           id,
           uid,
+          publisher: username
         });
       setIsLoading(false);
       history.push(`/text-editor/${id}`);

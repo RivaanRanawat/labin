@@ -13,6 +13,7 @@ function ReadResearch() {
   const { id } = useParams();
   const [quill, setQuill] = useState();
   const [title, setTitle] = useState("");
+  const [publisher, setPublisher] = useState("");
   const [paraContent, setParaContent] = useState();
   const history = useHistory();
   const [timeago, setTimeAgo] = useState();
@@ -47,6 +48,7 @@ function ReadResearch() {
         setParaContent(querySnapshot.data().content);
         setTitle(querySnapshot.data().name);
         setTimeAgo(querySnapshot.data().createdAt);
+        setPublisher(querySnapshot.data().publisher);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -60,7 +62,7 @@ function ReadResearch() {
     <Wrapper>
       <center>
         <h1>{title}</h1>
-        <p className="timeago">Published {moment(timeago).fromNow()}</p>
+        <p className="timeago">Published {moment(timeago).fromNow()} by {publisher}</p>
       </center>
       <div className="container-a" ref={ref}></div>
     </Wrapper>

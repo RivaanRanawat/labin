@@ -90,7 +90,7 @@ const Container = styled.main`
   padding: 0 calc(3.5vw + 5px);
 
   &:after {
-    background-color: #050714;
+    background-color: #090b13;
     content: "";
     position: absolute;
     inset: 0px;
