@@ -25,6 +25,8 @@ import CreateNewResearch from "./components/CreateNewResearch";
 import TextEditor from "./components/TextEditor";
 import ReadResearch from "./components/ReadResearch";
 import MyDrafts from "./components/MyDrafts";
+import { NotFound } from "http-errors";
+import Error404NotFound from "./components/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -72,9 +74,10 @@ function App() {
           <PrivateRoute path="/text-editor/:id" component={TextEditor} />
           <PrivateRoute path="/read-research/:id" component={ReadResearch} />
           <PrivateRoute path="/my-drafts" component={MyDrafts} />
+          <Route exact path="/*" component={Error404NotFound} />
         </Switch>
       ) : (
-        <Route exact path="/" component={Login} />
+        <Route exact path="/*" component={Login} />
       )}
     </div>
   );
